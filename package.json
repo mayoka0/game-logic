@@ -1,0 +1,17 @@
+{
+  "name": "game-logic",
+  "version": "1.0.0",
+  "description": "Nexus: The Master Orchestrator of Neon Surge",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}

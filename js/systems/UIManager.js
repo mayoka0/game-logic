@@ -37,6 +37,95 @@ export class UIManager {
         events.on('GAME_OVER', (data) => {
             this.showGameOver(data.score);
         });
+
+        events.on('GAME_START', () => {
+            this.hideAllOverlays();
+        });
+    }
+
+    createOverlay(id, title, subtitle, buttonText, callback) {
+        const overlay = document.createElement('div');
+        overlay.id = id;
+        overlay.style.cssText = `
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            background: rgba(0, 0, 0, 0.85);
+            color: #00ffff; font-family: 'Courier New', Courier, monospace;
+            z-index: 2000; text-align: center;
+            text-shadow: 0 0 10px #00ffff;
+        `;
+
+        const h1 = document.createElement('h1');
+        h1.textContent = title;
+        h1.style.fontSize = '4rem';
+        h1.style.margin = '0';
+        overlay.appendChild(h1);
+
+        if (subtitle) {
+            const p = document.createElement('p');
+            p.textContent = subtitle;
+            p.style.fontSize = '1.2rem';
+            overlay.appendChild(p);
+        }
+
+        const btn = document.createElement('button');
+        btn.textContent = buttonText;
+        btn.style.cssText = `
+            margin-top: 30px; padding: 15px 40px;
+            background: transparent; color: #00ffff;
+            border: 2px solid #00ffff; font-family: inherit;
+            font-size: 1.5rem; cursor: pointer;
+            transition: all 0.3s ease;
+        `;
+        btn.onmouseover = () => {
+            btn.style.background = '#00ffff';
+            btn.style.color = '#000';
+        };
+        btn.onmouseout = () => {
+            btn.style.background = 'transparent';
+            btn.style.color = '#00ffff';
+        };
+        btn.onclick = callback;
+        overlay.appendChild(btn);
+
+        document.body.appendChild(overlay);
+        return overlay;
+    }
+
+    hideAllOverlays() {
+        const overlays = ['main-menu', 'pause-menu', 'game-over'];
+        overlays.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
+    }
+
+    showMenu(callback) {
+        if (!document.getElementById('main-menu')) {
+            this.createOverlay(
+                'main-menu', 
+                'NEON SURGE', 
+                'SYNC YOUR CONSCIOUSNESS TO THE GRID', 
+                'INITIATE', 
+                callback
+            );
+        }
+        document.getElementById('main-menu').style.display = 'flex';
+    }
+
+    showPause(callback) {
+        if (!document.getElementById('pause-menu')) {
+            this.createOverlay(
+                'pause-menu', 
+                'LINK SUSPENDED', 
+                'NEURAL INTERFACE ON STANDBY', 
+                'RESUME', 
+                callback
+            );
+        }
+        document.getElementById('pause-menu').style.display = 'flex';
     }
 
     initCrosshair() {
